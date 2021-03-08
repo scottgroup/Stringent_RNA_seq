@@ -60,9 +60,9 @@ name_list = {
 
 
 inputs = snakemake.input.counts
-passing = snakemake.params.passing
-inputs = [x for x in inputs if f"/{passing}/" in x]
-
+#passing = snakemake.params.passing
+#inputs = [x for x in inputs if f"/{passing}/" in x]
+print(inputs)
 
 output = snakemake.output.merge_tpm
 

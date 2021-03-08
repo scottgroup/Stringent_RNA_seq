@@ -25,7 +25,8 @@ def run_star(index_dir,input1,input2,threads,outdir,stringence,log,zcat):
           '--outFilterMatchNminOverLread', '0.3',
           '--outFilterMultimapNmax', '100',
           '--winAnchorMultimapNmax', '100',
-          '--alignEndsProtrude', f'{stringence}', 'ConcordantPair',
+          '--alignEndsProtrude', '5', 'ConcordantPair',
+	  '--outFilterMismatchNmax', f'{stringence}',
           '&>', f'{log}']
   if zcat :
 
@@ -40,7 +41,7 @@ def run_star(index_dir,input1,input2,threads,outdir,stringence,log,zcat):
 run_star(f"{params.index_dir}",f"{input.fastq1}",f"{input.fastq2}",f"{threads}",f"{params.outdir0}",0,f"{log}",False)
 #subprocess.call(f'mv "{params.outdir2}"0"/{id}/" {params.outdir}Merge_Bam.bam ',shell=True)
 
-for i in range(1,4):
+for i in range(1,2):
   run_star(f"{params.index_dir}",f"{params.outdir2}"+str(i-1)+f"/{id}/"+"Unmapped.out.mate1",f"{params.outdir2}"+str(i-1)+f"/{id}/"+"Unmapped.out.mate2",f"{threads}",f"{params.outdir2}"+str(i)+f"/{id}/",i,f"{log}"+str(i)+f"/{id}/",True)
   #subprocess.call(f' samtools view {output.bam_merge} {output.bam} > {output.bam_merge} ',shell=True)
 

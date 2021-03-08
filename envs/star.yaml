@@ -1,5 +1,5 @@
 channels:
   - bioconda
 dependencies:
-  - star =2.6.1a
+  - star =2.7.0a
   - samtools =1.9

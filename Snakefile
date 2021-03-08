@@ -16,28 +16,31 @@ simple_id = list(config['dataset'].keys())
 
 rule all:
     input:
-        qc_before_trim = expand("logs/fastqc/before_trim/{id}.log",
-            id=simple_id),
-        qc_after_trim = expand("logs/fastqc/after_trim/{id}.log", id=simple_id),
+        #qc_before_trim = expand("logs/fastqc/before_trim/{id}.log",
+           # id=simple_id),
+        #qc_after_trim = expand("logs/fastqc/after_trim/{id}.log", id=simple_id),
         coco_cc = expand('results/coco/{id}.tsv', id=simple_id),
+        gtf = config['path']['reference_annotation'],
+        intron_gtf_ca = config['path']['reference_intron_annotation'],
         bam_merge =expand( "results/star/{id}/Merge_bam.bam",id=simple_id),
         merge_tpm = "results/coco/merge_tpm_final.tsv",
         bam = expand("results/star/0/{id}/Aligned.sortedByCoord.out.bam",id =simple_id)
+
 """
 rule all_downloads:
     input:
        # samples = expand('data/references/fastq/{id}_{pair}.fastq.gz',
         #    id=original_id, pair=[1, 2]),
-        reference_genome = config['path']['reference_genome'],
+        #reference_genome = config['path']['reference_genome'],
         reference_gtf = config['path']['reference_annotation'],
-        reference_intron_gtf = config['path']['reference_intron_annotation'],
+        #reference_intron_gtf = config['path']['reference_intron_annotation'],
         coco_git = directory('git_repos/coco')
 """
 
 
-
+"""
 rule rename_samples:
-    """Rename samples with a nicer understandable name"""
+    Rename samples with a nicer understandable name
     input:
         fastq = expand(
             "data/references/fastq/{id}_{pair}.fastq.gz",
@@ -53,10 +56,10 @@ rule rename_samples:
                 new = "data/references/fastq/{}_R{}.fastq.gz".format(new_name, num)
                 print(old, new)
                 os.rename(old, new)
-
+"""
 
 rule trimming:
-    """Trims the input FASTQ files using Trimmomatic"""
+    "Trims the input FASTQ files using Trimmomatic"
     input:
         fastq1 = "../../../home/lafced/projects/def-scottmic/scottmic_group/sequencing_runs/Tissues/raw_fastq_all_tissues/{id}_R1_001.fastq.gz",
         fastq2 = "../../../home/lafced/projects/def-scottmic/scottmic_group/sequencing_runs/Tissues/raw_fastq_all_tissues/{id}_R2_001.fastq.gz"
@@ -111,8 +114,8 @@ rule qc_before_trim:
         "{input.fastq1} "
         "{input.fastq2} "
         "&> {log}"
-
-
+"""
+"""
 rule qc_after_trim:
     "Assess fastq quality after trimming reads"
     input:
@@ -138,6 +141,24 @@ rule qc_after_trim:
         "{input.fastq2} "
         "&> {log}"
 """
+
+rule coco_ca:
+    "correct annotation for gtf"
+    input:
+        gtf_ca = config['path']['reference_annotation']
+        
+    output:
+        gtf = config['path']['reference_annotation'],
+        intron_gtf = config['path']['reference_intron_annotation']
+    conda:
+        "envs/coco.yaml"
+    params:
+        coco_path = "git_repos/coco/bin"
+    shell:
+        "python {params.coco_path}/correct_annotation.py "
+        "{input.gtf_ca}"
+       
+
 
 rule star_index:
     """Generate the genome index needed for STAR alignment"""
@@ -172,9 +193,11 @@ rule star_align:
         idx = rules.star_index.output
     output:
         bam = "results/star/0/{id}/Aligned.sortedByCoord.out.bam",
-        
+        bam1 = "results/star/1/{id}/Aligned.sortedByCoord.out.bam",
+        #bam2= "results/star/2/{id}/Aligned.sortedByCoord.out.bam",
+        #bam3 = "results/star/3/{id}/Aligned.sortedByCoord.out.bam",
     threads:
-        32
+        16
     params:
         index_dir = "data/star_index/",
         outdir2 = "results/star/",
@@ -190,18 +213,18 @@ rule star_align:
 rule Merge_BAM:
     """ Merge the BAM files before going to coco"""        
     input: 
-        bam = expand("results/star/{wild}/{{id}}/Aligned.sortedByCoord.out.bam",wild=[0,1,2,3])
+        bam = expand("results/star/{wild}/{{id}}/Aligned.sortedByCoord.out.bam",wild=[0,1])
     output:
         bam_merge = "results/star/{id}/Merge_bam.bam"
     threads:
-        32
+        4
     params:
         outdir = "results/star/{id}/",
         outdir_star = "results/star/0/{id}/"
     conda:
         "envs/star.yaml"
-    script:
-        "scripts/merge_bam.py"
+    shell:
+        "samtools merge {output.bam_merge} {input.bam} "
 
 
 
@@ -219,7 +242,7 @@ rule coco_cc:
     output:
         counts = Path("results/coco/", "{id}.tsv") 
     threads:
-        32
+        16
     params:
         coco_path = "git_repos/coco/bin"
     log:
@@ -250,5 +273,5 @@ rule merge:
 
 
 #Include download_all rules to download necessary datasets and references
-include: "rules/download_all.smk"
+#include: "rules/download_all.smk"
 
