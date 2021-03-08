@@ -20,9 +20,7 @@ rule all_downloads:
         samples = expand('data/references/fastq/{id}_{pair}.fastq.gz',
             id=original_id, pair=[1, 2]),
         reference_genome = config['path']['reference_genome'],
-        standard_gtf = config['path']['standard_annotation'],
         reference_gtf = config['path']['reference_annotation'],
-        reference_intron_gtf = config['path']['reference_intron_annotation'],
         coco_git = 'git_repos/coco'
 
 
@@ -91,8 +89,6 @@ rule coco_ca:
         "python {params.coco_path}/correct_annotation.py "
         "{input.gtf_ca}"
 
-
-
 rule star_index:
     """Generate the genome index needed for STAR alignment"""
     input:
@@ -116,7 +112,6 @@ rule star_index:
         "--sjdbGTFfile {input.gtf} "
         "--sjdbOverhang 74 "
         "&> {log}"
-
 
 rule star_align:
     """Align reads to reference genome using STAR"""
@@ -142,7 +137,6 @@ rule star_align:
     script:
         "scripts/run_star.py"
 
-
 rule Merge_BAM:
     """ Merge the BAM files before going to coco"""
     input:
@@ -159,17 +153,15 @@ rule Merge_BAM:
     shell:
         "samtools merge {output.bam_merge} {input.bam} "
 
-
-
 rule coco_cc:
     """ Quantify the number of counts, counts per million (CPM) and transcript
         per million (TPM) for each gene using CoCo correct_count (cc). If you
         want to use your own annotation file, you must implement in this
         workflow the correct_annotation function of CoCo in order to use CoCo's
         correct_count function. Otherwise, by default, you will use the given
-        annotation file used in this analysis """        intron_gtf_ca = config['path']['reference_intron_annotation'],
+        annotation file used in this analysis """
     input:
-        gtf = config['path']['reference_annotation'],
+        gtf = config['path']['reference_annotation_ca'],
         intron_gtf = config['path']['reference_intron_annotation'],
         bam = rules.Merge_BAM.output.bam_merge
     output:
@@ -192,7 +184,6 @@ rule coco_cc:
         "{input.bam} "
         "{output.counts} "
         "&> {log}"
-
 
 rule merge:
     input:

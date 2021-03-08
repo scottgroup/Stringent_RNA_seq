@@ -26,9 +26,9 @@
     "path":
     {
         "reference_genome": "data/references/human_genome_ensembl_101.fa",
-        "reference_annotation": "data/references/hg38_Ensembl_V101_Scottlab_2020.correct_annotation.gtf",
+        "reference_annotation": "data/references/hg38_Ensembl_V101_Scottlab_2020.gtf",
+        "reference_annotation_ca": "data/references/hg38_Ensembl_V101_Scottlab_2020.correct_annotation.gtf",
         "reference_intron_annotation": "data/references/hg38_Ensembl_V101_Scottlab_2020.correct_annotation.introns.gtf",
-        "reference_annotation_ca": "data/references/hg38_Ensembl_V101_Scottlab_2020.gtf",
         "coco_git_link": "http://gitlabscottgroup.med.usherbrooke.ca/scott-group/coco.git"
     },
     "download":

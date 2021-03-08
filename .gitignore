@@ -1,0 +1,9 @@
+.git/
+.snakemake/
+slurm-*
+Log.out
+
+data/
+git_repos/
+results/
+logs/

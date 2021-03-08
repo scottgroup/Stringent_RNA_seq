@@ -11,7 +11,6 @@ id = snakemake.wildcards.id
 
 def run_star(index_dir,input1,input2,threads,outdir,stringence,log,zcat):
 
-
   Star_list = ['STAR', '--runMode', 'alignReads',
           '--genomeDir', f'{index_dir}',
           '--readFilesIn', f'{input1}', f'{input2}',
@@ -30,16 +29,31 @@ def run_star(index_dir,input1,input2,threads,outdir,stringence,log,zcat):
           '--winAnchorMultimapNmax', '100',
           '--alignEndsProtrude', f'{stringence}', 'ConcordantPair',
           '&>', f'{log}']
-  if zcat :
 
+  if zcat :
     del Star_list[10]
     del Star_list[11]
 
-
-
   subprocess.call(Star_list)
 
-run_star(f"{params.index_dir}",f"{input.fastq1}",f"{input.fastq2}",f"{threads}",f"{params.outdir0}",0,f"{log}",False)
+# Run the first time
+run_star(f"{params.index_dir}",
+         f"{input.fastq1}",
+         f"{input.fastq2}",
+         f"{threads}",
+         f"{params.outdir0}",
+         0,
+         f"{log}",
+         False)
 
+# Take the Unmapped for other rounds
 for i in range(1,4):
-  run_star(f"{params.index_dir}",f"{params.outdir2}"+str(i-1)+f"/{id}/"+"Unmapped.out.mate1",f"{params.outdir2}"+str(i-1)+f"/{id}/"+"Unmapped.out.mate2",f"{threads}",f"{params.outdir2}"+str(i)+f"/{id}/",i,f"{log}"+str(i)+f"/{id}/",True)
+
+  run_star(f"{params.index_dir}",
+           f"{params.outdir2}{i-1}/{id}/Unmapped.out.mate1",
+           f"{params.outdir2}{i-1}/{id}/Unmapped.out.mate2",
+           f"{threads}",
+           f"{params.outdir2}{i}/{id}/",
+           i,
+           f"{log}{i}/{id}/",
+           True)
