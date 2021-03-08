@@ -18,7 +18,6 @@ rule download_sample_fastq:
         "gzip -f {params.samples_fastq_1} > {output.samples_fastq_1_gz} && "
         "gzip -f {params.samples_fastq_2} > {output.samples_fastq_2_gz}"
 
-
 rule download_genome:
     """Download the reference genome (fasta file) used for this analysis from
         ENSEMBL ftp servers."""
@@ -30,18 +29,14 @@ rule download_genome:
         "wget --quiet -O {output.genome}.gz {params.link} && "
         "gunzip {output.genome}.gz"
 
-
 rule download_annotation:
     """Download the annotation (gtf file) used for this analysis."""
     output:
         gtf = config['path']['reference_annotation'],
-        intron_gtf = config['path']['reference_intron_annotation']
     params:
         link_annotation = config['download']['annotation'],
-        link_intron_annotation = config['download']['intron_annotation']
     shell:
-        "wget --quiet -O {output.gtf} {params.link_annotation} && "
-        "wget --quiet -O {output.intron_gtf} {params.link_intron_annotation}"
+        "wget --quiet -O {output.gtf} {params.link_annotation}"
 
 rule download_coco_git:
     """Download git repository of CoCo."""
@@ -49,7 +44,6 @@ rule download_coco_git:
         git_coco_folder = directory('git_repos/coco')
     params:
         git_coco_link = config['path']['coco_git_link']
-
     conda:
         '../envs/git.yaml'
     shell:

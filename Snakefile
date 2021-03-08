@@ -4,43 +4,30 @@ from pathlib import Path
 
 configfile: "config.json"
 
-
-
-
-
-
-
 original_id = list(config['dataset'].values())
 simple_id = list(config['dataset'].keys())
 
 
 rule all:
     input:
-        #qc_before_trim = expand("logs/fastqc/before_trim/{id}.log",
-           # id=simple_id),
-        #qc_after_trim = expand("logs/fastqc/after_trim/{id}.log", id=simple_id),
         coco_cc = expand('results/coco/{id}.tsv', id=simple_id),
-        gtf = config['path']['reference_annotation'],
-        intron_gtf_ca = config['path']['reference_intron_annotation'],
-        bam_merge =expand( "results/star/{id}/Merge_bam.bam",id=simple_id),
+        bam_merge =expand("results/star/{id}/Merge_bam.bam",id=simple_id),
         merge_tpm = "results/coco/merge_tpm_final.tsv",
-        bam = expand("results/star/0/{id}/Aligned.sortedByCoord.out.bam",id =simple_id)
+        bam = expand("results/star/0/{id}/Aligned.sortedByCoord.out.bam", id=simple_id)
 
-"""
 rule all_downloads:
     input:
-       # samples = expand('data/references/fastq/{id}_{pair}.fastq.gz',
-        #    id=original_id, pair=[1, 2]),
-        #reference_genome = config['path']['reference_genome'],
+        samples = expand('data/references/fastq/{id}_{pair}.fastq.gz',
+            id=original_id, pair=[1, 2]),
+        reference_genome = config['path']['reference_genome'],
+        standard_gtf = config['path']['standard_annotation'],
         reference_gtf = config['path']['reference_annotation'],
-        #reference_intron_gtf = config['path']['reference_intron_annotation'],
-        coco_git = directory('git_repos/coco')
-"""
+        reference_intron_gtf = config['path']['reference_intron_annotation'],
+        coco_git = 'git_repos/coco'
 
 
-"""
 rule rename_samples:
-    Rename samples with a nicer understandable name
+    """Rename samples with a nicer understandable name"""
     input:
         fastq = expand(
             "data/references/fastq/{id}_{pair}.fastq.gz",
@@ -56,13 +43,13 @@ rule rename_samples:
                 new = "data/references/fastq/{}_R{}.fastq.gz".format(new_name, num)
                 print(old, new)
                 os.rename(old, new)
-"""
+
 
 rule trimming:
-    "Trims the input FASTQ files using Trimmomatic"
+    """Trims the input FASTQ files using Trimmomatic"""
     input:
-        fastq1 = "../../../home/lafced/projects/def-scottmic/scottmic_group/sequencing_runs/Tissues/raw_fastq_all_tissues/{id}_R1_001.fastq.gz",
-        fastq2 = "../../../home/lafced/projects/def-scottmic/scottmic_group/sequencing_runs/Tissues/raw_fastq_all_tissues/{id}_R2_001.fastq.gz"
+        fastq1 = "data/references/fastq/{id}_R1.fastq.gz",
+        fastq2 = "data/references/fastq/{id}_R2.fastq.gz"
     output:
         fastq1 = "data/Trimmomatic/trimmed_reads/{id}_R1.fastq.gz",
         fastq2 = "data/Trimmomatic/trimmed_reads/{id}_R2.fastq.gz",
@@ -89,66 +76,12 @@ rule trimming:
         "{params.options} "
         "&> {log}"
 
-"""
-rule qc_before_trim:
-    "Assess fastq quality before trimming reads"
-    input:
-        fastq1 = "../../../home/lafced/projects/def-scottmic/scottmic_group/sequencing_runs/Tissues/raw_fastq_all_tissues/{id}_R1_001.fastq.gz",
-        fastq2 = "../../../home/lafced/projects/def-scottmic/scottmic_group/sequencing_runs/Tissues/raw_fastq_all_tissues/{id}_R2_001.fastq.gz"
-    output:
-        qc_report1 = "data/FastQC/Before_trim/{id}_R1_fastqc.html",
-        qc_report2 = "data/FastQC/Before_trim/{id}_R2_fastqc.html"
-    threads:
-        32
-    params:
-        out_dir = "data/FastQC/Before_trim"
-    log:
-        "logs/fastqc/before_trim/{id}.log"
-    conda:
-        "envs/fastqc.yaml"
-    shell:
-        "fastqc "
-        "-f fastq "
-        "-t {threads} "
-        "-o {params.out_dir} "
-        "{input.fastq1} "
-        "{input.fastq2} "
-        "&> {log}"
-"""
-"""
-rule qc_after_trim:
-    "Assess fastq quality after trimming reads"
-    input:
-        fastq1 = rules.trimming.output.fastq1,
-        fastq2 = rules.trimming.output.fastq2
-    output:
-        qc_report1 = "data/FastQC/After_trim/{id}_R1_fastqc.html",
-        qc_report2 = "data/FastQC/After_trim/{id}_R2_fastqc.html"
-    threads:
-        32
-    params:
-        out_dir = "data/FastQC/After_trim"
-    log:
-        "logs/fastqc/after_trim/{id}.log"
-    conda:
-        "envs/fastqc.yaml"
-    shell:
-        "fastqc "
-        "-f fastq "
-        "-t {threads} "
-        "-o {params.out_dir} "
-        "{input.fastq1} "
-        "{input.fastq2} "
-        "&> {log}"
-"""
-
 rule coco_ca:
-    "correct annotation for gtf"
+    """ Correct gtf annotation with CoCo correct_annotation for embedded genes"""
     input:
-        gtf_ca = config['path']['reference_annotation_ca']
-        
+        gtf_ca = config['path']['reference_annotation']
     output:
-        gtf = config['path']['reference_annotation'],
+        gtf = config['path']['reference_annotation_ca'],
         intron_gtf = config['path']['reference_intron_annotation']
     conda:
         "envs/coco.yaml"
@@ -157,7 +90,7 @@ rule coco_ca:
     shell:
         "python {params.coco_path}/correct_annotation.py "
         "{input.gtf_ca}"
-       
+
 
 
 rule star_index:
@@ -211,8 +144,8 @@ rule star_align:
 
 
 rule Merge_BAM:
-    """ Merge the BAM files before going to coco"""        
-    input: 
+    """ Merge the BAM files before going to coco"""
+    input:
         bam = expand("results/star/{wild}/{{id}}/Aligned.sortedByCoord.out.bam",wild=[0,1,2,3])
     output:
         bam_merge = "results/star/{id}/Merge_bam.bam"
@@ -229,18 +162,18 @@ rule Merge_BAM:
 
 
 rule coco_cc:
-    """Quantify the number of counts, counts per million (CPM) and transcript
+    """ Quantify the number of counts, counts per million (CPM) and transcript
         per million (TPM) for each gene using CoCo correct_count (cc). If you
         want to use your own annotation file, you must implement in this
         workflow the correct_annotation function of CoCo in order to use CoCo's
-        correct_count function. Otherwise, by default, you will use the given 
-        annotation file used in this analysis"""
+        correct_count function. Otherwise, by default, you will use the given
+        annotation file used in this analysis """        intron_gtf_ca = config['path']['reference_intron_annotation'],
     input:
         gtf = config['path']['reference_annotation'],
         intron_gtf = config['path']['reference_intron_annotation'],
         bam = rules.Merge_BAM.output.bam_merge
     output:
-        counts = Path("results/coco/", "{id}.tsv") 
+        counts = Path("results/coco/", "{id}.tsv")
     threads:
         16
     params:
@@ -273,5 +206,4 @@ rule merge:
 
 
 #Include download_all rules to download necessary datasets and references
-#include: "rules/download_all.smk"
-
+include: "rules/download_all.smk"

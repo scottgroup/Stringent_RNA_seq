@@ -1,70 +1,39 @@
 {
-  "dataset":
-  {
-    "brain_A802070_S5": "Liver_1",
-    
-    "brain_B702085_S4": "Liver_2",
-    
-    "brain_C210018_S3": "Liver_3",
-    
-    "BRN117": "Breast_1",
-   
-    "BRN491": "Breast_2",
-    
-    "BRN_574": "Breast_3",
-    
-
-    "liver_B603125_S2": "Brain_1",
-   
-    "liver_B802097_S1": "Brain_2",
-    
-    "NPR026": "Prostate_1",
-    
-    "NPR029": "Prostate_2",
-    
-    "NPR036": "Prostate_3",
-    
-    "OVN218": "Ovary_1",
-    
-    "OVN377": "Ovary_2",
-    
-    "OVN85": "OvARY_3",
-   
-    "Skeletal_muscle_1_S3": "Skeletal_muscle_1",
-    
-    "Skeletal_muscle_2_S4": "Skeletal_muscle_2",
-    
-    "Skeletal_muscle_3_S5": "Skeletal_muscle_3",
-    
-    "Testis1_S1": "Testis_3",
-
-    "testis_B606080_S7": "Brain_1",
-    
-    "testis_B703033_S6": "Brain_2",
-    
-    "testis_B703034_S8": "Brain_3",
-    
-
-
-
-  },
-
-
-
-
-  "path":
-  {
-    "fastq": "../../home/lafced/projects/def-scottmic/scottmic_group/sequencing_runs/Tissues/raw_fastq_all_tissues/",
-    "reference_genome": "data/references/human_genome_ensembl_87.fa",
-    "reference_annotation": "data/references/hg38_Ensembl_V101_Scottlab_2020.correct_annotation.gtf",
-    "reference_intron_annotation": "data/references/hg38_Ensembl_V101_Scottlab_2020.correct_annotation.introns.gtf",
-    "reference_annotation_ca": "data/references/hg38_Ensembl_V101_Scottlab_2020.gtf",
-    "coco_git_link": "http://gitlabscottgroup.med.usherbrooke.ca/scott-group/coco.git"
-  },
-  "download":
-  {
-    "genome": "ftp://ftp.ensembl.org/pub/release-87/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz",
-    "annotation": "https://zenodo.org/record/3981426/files/human_ensembl_87_wo_dup_v2.BB_v3.correct_annotation.gtf",
-    "intron_annotation": "https://zenodo.org/record/4002130/files/human_ensembl_87_wo_dup_v2.BB_v3.correct_annotation.introns.gtf"
-  }
+    "dataset":
+    {
+        "Breast_1": "SRX5395643",
+        "Breast_2": "SRX5395644",
+        "Breast_3": "SRX9318421",
+        "Ovary_1": "SRX5395641",
+        "Ovary_2": "SRX5395642",
+        "Ovary_3": "SRX5395640",
+        "Prostate_1": "SRX5395645",
+        "Prostate_2": "SRX5395646",
+        "Prostate_3": "SRX5395647",
+        "Testis_1": "SRX9107955",
+        "Testis_2": "SRX9107956",
+        "Testis_3": "SRX9107957",
+        "Skeletal_muscle_1": "SRX9107958",
+        "Skeletal_muscle_2": "SRX9107959",
+        "Skeletal_muscle_3": "SRX9107960",
+        "Liver_1": "SRX9107961",
+        "Liver_2": "SRX9107962",
+        "Liver_3": "SRX9107963",
+        "Brain_1": "SRX9107964",
+        "Brain_2": "SRX9107965",
+        "Brain_3": "SRX9107966"
+    },
+    "path":
+    {
+        "reference_genome": "data/references/human_genome_ensembl_101.fa",
+        "reference_annotation": "data/references/hg38_Ensembl_V101_Scottlab_2020.correct_annotation.gtf",
+        "reference_intron_annotation": "data/references/hg38_Ensembl_V101_Scottlab_2020.correct_annotation.introns.gtf",
+        "reference_annotation_ca": "data/references/hg38_Ensembl_V101_Scottlab_2020.gtf",
+        "coco_git_link": "http://gitlabscottgroup.med.usherbrooke.ca/scott-group/coco.git"
+    },
+    "download":
+    {
+        "genome": "ftp://ftp.ensembl.org/pub/release-101/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz",
+        "annotation": "https://zenodo.org/record/3981426/files/human_ensembl_87_wo_dup_v2.BB_v3.correct_annotation.gtf"
+    }
 }
