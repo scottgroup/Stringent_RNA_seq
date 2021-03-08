@@ -30,8 +30,8 @@
     "star_index":
     {
         "cpus-per-task": "32",
-        "mem": "128G",
-        "time": "0-2:00:00"
+        "mem": "64G",
+        "time": "0-5:00:00"
     },
     "star_align":
     {
@@ -42,7 +42,7 @@
     "coco_cc":
     {
         "cpus-per-task": "32",
-        "mem": "64G",
+        "mem": "32G",
         "time": "0-6:00:00"
     },
     "coco_ca":
