@@ -34,6 +34,6 @@
     "download":
     {
         "genome": "ftp://ftp.ensembl.org/pub/release-101/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz",
-        "annotation": "https://zenodo.org/record/3981426/files/human_ensembl_87_wo_dup_v2.BB_v3.correct_annotation.gtf"
+        "annotation": "https://zenodo.org/record/MUST_CHANGE_THIS_LINK!!!!!!!!" 
     }
 }
