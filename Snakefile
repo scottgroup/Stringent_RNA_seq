@@ -145,7 +145,7 @@ rule qc_after_trim:
 rule coco_ca:
     "correct annotation for gtf"
     input:
-        gtf_ca = config['path']['reference_annotation']
+        gtf_ca = config['path']['reference_annotation_ca']
         
     output:
         gtf = config['path']['reference_annotation'],
@@ -194,8 +194,8 @@ rule star_align:
     output:
         bam = "results/star/0/{id}/Aligned.sortedByCoord.out.bam",
         bam1 = "results/star/1/{id}/Aligned.sortedByCoord.out.bam",
-        #bam2= "results/star/2/{id}/Aligned.sortedByCoord.out.bam",
-        #bam3 = "results/star/3/{id}/Aligned.sortedByCoord.out.bam",
+        bam2= "results/star/2/{id}/Aligned.sortedByCoord.out.bam",
+        bam3 = "results/star/3/{id}/Aligned.sortedByCoord.out.bam",
     threads:
         16
     params:
@@ -213,7 +213,7 @@ rule star_align:
 rule Merge_BAM:
     """ Merge the BAM files before going to coco"""        
     input: 
-        bam = expand("results/star/{wild}/{{id}}/Aligned.sortedByCoord.out.bam",wild=[0,1])
+        bam = expand("results/star/{wild}/{{id}}/Aligned.sortedByCoord.out.bam",wild=[0,1,2,3])
     output:
         bam_merge = "results/star/{id}/Merge_bam.bam"
     threads:
