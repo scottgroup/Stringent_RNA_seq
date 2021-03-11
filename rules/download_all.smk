@@ -4,19 +4,18 @@ rule download_sample_fastq:
     """Download expression datasets of all tissue samples from GEO. This step
         might take long, depending on your downloading speed."""
     output:
-        samples_fastq_1_gz = "data/references/fastq/{id}_1.fastq.gz",
-        samples_fastq_2_gz = "data/references/fastq/{id}_2.fastq.gz"
-    params:
         samples_fastq_1 = "data/references/fastq/{id}_1.fastq",
         samples_fastq_2 = "data/references/fastq/{id}_2.fastq"
+    params:
+        link = "https://sra-downloadb.be-md.ncbi.nlm.nih.gov/sos3/sra-pub-run-20/{id}/{id}.1"
     conda:
         "../envs/geo_download.yaml"
     shell:
         "mkdir -p data/references/fastq/ && "
-        "fasterq-dump --split-files {wildcards.id} "
-        "-O data/references/fastq/ && "
-        "gzip -f {params.samples_fastq_1} > {output.samples_fastq_1_gz} && "
-        "gzip -f {params.samples_fastq_2} > {output.samples_fastq_2_gz}"
+        "mkdir -p data/SRA/ && "
+        "wget {params.link} --quiet -O data/SRA/{wildcards.id}"
+        "fasterq-dump --skip-technical --split-files data/SRA/{wildcards.id} "
+        "-O data/references/fastq/ "
 
 rule download_genome:
     """Download the reference genome (fasta file) used for this analysis from

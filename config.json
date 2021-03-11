@@ -1,27 +1,27 @@
 {
     "dataset":
     {
-        "Breast_1": "SRX5395643",
-        "Breast_2": "SRX5395644",
-        "Breast_3": "SRX9318421",
-        "Ovary_1": "SRX5395641",
-        "Ovary_2": "SRX5395642",
-        "Ovary_3": "SRX5395640",
-        "Prostate_1": "SRX5395645",
-        "Prostate_2": "SRX5395646",
-        "Prostate_3": "SRX5395647",
-        "Testis_1": "SRX9107955",
-        "Testis_2": "SRX9107956",
-        "Testis_3": "SRX9107957",
-        "Skeletal_muscle_1": "SRX9107958",
-        "Skeletal_muscle_2": "SRX9107959",
-        "Skeletal_muscle_3": "SRX9107960",
-        "Liver_1": "SRX9107961",
-        "Liver_2": "SRX9107962",
-        "Liver_3": "SRX9107963",
-        "Brain_1": "SRX9107964",
-        "Brain_2": "SRX9107965",
-        "Brain_3": "SRX9107966"
+        "Breast_1": "SRX5395643", "SRR8595557"
+        "Breast_2": "SRX5395644", "SRR8595558"
+        "Breast_3": "SRX9318421", "SRR12851454"
+        "Ovary_1": "SRX5395641", "SRR8595555"
+        "Ovary_2": "SRX5395642", "SRR8595556"
+        "Ovary_3": "SRX5395640", "SRR8595554	"
+        "Prostate_1": "SRX5395645", "SRR8595559"
+        "Prostate_2": "SRX5395646", "SRR8595560"
+        "Prostate_3": "SRX5395647", "SRR8595561"
+        "Testis_1": "SRX9107955", ""
+        "Testis_2": "SRX9107956", ""
+        "Testis_3": "SRX9107957", ""
+        "Skeletal_muscle_1": "SRX9107958", ""
+        "Skeletal_muscle_2": "SRX9107959", ""
+        "Skeletal_muscle_3": "SRX9107960", ""
+        "Liver_1": "SRX9107961", ""
+        "Liver_2": "SRX9107962", ""
+        "Liver_3": "SRX9107963", ""
+        "Brain_1": "SRX9107964", ""
+        "Brain_2": "SRX9107965", ""
+        "Brain_3": "SRX9107966", ""
     },
     "path":
     {
@@ -34,6 +34,6 @@
     "download":
     {
         "genome": "ftp://ftp.ensembl.org/pub/release-101/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz",
-        "annotation": "https://zenodo.org/record/MUST_CHANGE_THIS_LINK!!!!!!!!" 
+        "annotation": "https://zenodo.org/record/4570182/files/hg38_Ensembl_V101_Scottlab_2020.gtf"
     }
 }
