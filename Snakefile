@@ -24,24 +24,6 @@ rule all_downloads:
         coco_git = 'git_repos/coco'
 
 
-# rule rename_samples:
-#     """Rename samples with a nicer understandable name"""
-#     input:
-#         fastq = expand(
-#             "data/references/fastq/{id}_{pair}.fastq",
-#             id=original_id, pair=[1, 2])
-#     output:
-#         renamed_fastq = expand(
-#             "data/references/fastq/{id}_R{pair}.fastq",
-#             id=simple_id, pair=[1, 2])
-#     run:
-#         for new_name, old_name in config['dataset'].items():
-#             for num in [1, 2]:
-#                 old = "data/references/fastq/{}_{}.fastq".format(old_name, num)
-#                 new = "data/references/fastq/{}_R{}.fastq".format(new_name, num)
-#                 print(old, new)
-#                 os.rename(old, new)
-
 
 rule trimming:
     """Trims the input FASTQ files using Trimmomatic"""
