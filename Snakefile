@@ -18,41 +18,41 @@ rule all:
 rule all_downloads:
     input:
         samples = expand('data/references/fastq/{id}_{pair}.fastq',
-            id=original_id, pair=[1, 2]),
+            id=simple_id, pair=[1, 2]),
         reference_genome = config['path']['reference_genome'],
         reference_gtf = config['path']['reference_annotation'],
         coco_git = 'git_repos/coco'
 
 
-rule rename_samples:
-    """Rename samples with a nicer understandable name"""
-    input:
-        fastq = expand(
-            "data/references/fastq/{id}_{pair}.fastq",
-            id=original_id, pair=[1, 2])
-    output:
-        renamed_fastq = expand(
-            "data/references/fastq/{id}_R{pair}.fastq",
-            id=simple_id, pair=[1, 2])
-    run:
-        for new_name, old_name in config['dataset'].items():
-            for num in [1, 2]:
-                old = "data/references/fastq/{}_{}.fastq".format(old_name, num)
-                new = "data/references/fastq/{}_R{}.fastq".format(new_name, num)
-                print(old, new)
-                os.rename(old, new)
+# rule rename_samples:
+#     """Rename samples with a nicer understandable name"""
+#     input:
+#         fastq = expand(
+#             "data/references/fastq/{id}_{pair}.fastq",
+#             id=original_id, pair=[1, 2])
+#     output:
+#         renamed_fastq = expand(
+#             "data/references/fastq/{id}_R{pair}.fastq",
+#             id=simple_id, pair=[1, 2])
+#     run:
+#         for new_name, old_name in config['dataset'].items():
+#             for num in [1, 2]:
+#                 old = "data/references/fastq/{}_{}.fastq".format(old_name, num)
+#                 new = "data/references/fastq/{}_R{}.fastq".format(new_name, num)
+#                 print(old, new)
+#                 os.rename(old, new)
 
 
 rule trimming:
     """Trims the input FASTQ files using Trimmomatic"""
     input:
-        fastq1 = "data/references/fastq/{id}_R1.fastq",
-        fastq2 = "data/references/fastq/{id}_R2.fastq"
+        fastq1 = "data/references/fastq/{id}_1.fastq",
+        fastq2 = "data/references/fastq/{id}_2.fastq"
     output:
-        fastq1 = "data/Trimmomatic/trimmed_reads/{id}_R1.fastq.gz",
-        fastq2 = "data/Trimmomatic/trimmed_reads/{id}_R2.fastq.gz",
-        unpaired_fastq1 = "data/Trimmomatic/trimmed_reads/{id}_R1.unpaired.fastq.gz",
-        unpaired_fastq2 = "data/Trimmomatic/trimmed_reads/{id}_R2.unpaired.fastq.gz"
+        fastq1 = "data/Trimmomatic/trimmed_reads/{id}_1.fastq.gz",
+        fastq2 = "data/Trimmomatic/trimmed_reads/{id}_2.fastq.gz",
+        unpaired_fastq1 = "data/Trimmomatic/trimmed_reads/{id}_1.unpaired.fastq.gz",
+        unpaired_fastq2 = "data/Trimmomatic/trimmed_reads/{id}_2.unpaired.fastq.gz"
     threads:
         32
     params:

@@ -1,5 +1,11 @@
 import os
 
+def get_link(id):
+    return config['dataset'][f"{id}"][1]
+
+def get_SRR(id):
+    return config['dataset'][f"{id}"][0]
+
 rule download_sample_fastq:
     """Download expression datasets of all tissue samples from GEO. This step
         might take long, depending on your downloading speed."""
@@ -7,13 +13,14 @@ rule download_sample_fastq:
         samples_fastq_1 = "data/references/fastq/{id}_1.fastq",
         samples_fastq_2 = "data/references/fastq/{id}_2.fastq"
     params:
-        link = config['dataset']["{id}"][1]
+        link = get_link,
+        SRR = get_SRR
     conda:
         "../envs/geo_download.yaml"
     shell:
         "mkdir -p data/references/fastq/ && "
         "mkdir -p data/SRA/ && "
-        "wget {params.link} --quiet -O data/SRA/{wildcards.id}"
+        "wget {params.link} --quiet -O data/SRA/{wildcards.id} && "
         "fasterq-dump --skip-technical --split-files data/SRA/{wildcards.id} "
         "-O data/references/fastq/ "
 
