@@ -7,7 +7,7 @@ rule download_sample_fastq:
         samples_fastq_1 = "data/references/fastq/{id}_1.fastq",
         samples_fastq_2 = "data/references/fastq/{id}_2.fastq"
     params:
-        link = "https://sra-downloadb.be-md.ncbi.nlm.nih.gov/sos3/sra-pub-run-20/{id}/{id}.1"
+        link = config['dataset']["{id}"][1]
     conda:
         "../envs/geo_download.yaml"
     shell:
