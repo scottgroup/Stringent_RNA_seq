@@ -26,7 +26,8 @@ def run_star(index_dir,input1,input2,threads,outdir,stringence,log,zcat):
     '--outFilterMatchNminOverLread', '0.3',
     '--outFilterMultimapNmax', '100',
     '--winAnchorMultimapNmax', '100',
-    '--alignEndsProtrude', f'{stringence}', 'ConcordantPair',
+    '--alignEndsProtrude', '5', 'ConcordantPair',
+    '--outFilterMismatchNmax', f'{stringence}',
     '&>', f'{log}'
   ]
 
